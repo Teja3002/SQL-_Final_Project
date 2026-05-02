@@ -1,0 +1,21 @@
+genre_id,name,description
+1,Pop,Popular music characterized by catchy melodies and broad appeal
+2,Rock,Guitar-driven music with strong rhythms and powerful vocals
+3,Hip Hop,Rhythmic music featuring rapping and beatboxing
+4,R&B,"Rhythm and blues combining soul, funk, and pop"
+5,Electronic,Music produced primarily with electronic instruments
+6,Jazz,Improvisational music with complex harmonies
+7,Classical,Traditional Western art music
+8,Country,Music originating from American folk and Western traditions
+9,Reggae,Jamaican music with distinctive rhythmic patterns
+10,Blues,Music expressing emotions through specific chord progressions
+11,Metal,"Heavy, amplified rock music with aggressive sounds"
+12,Folk,Traditional acoustic music passed through generations
+13,Latin,Music from Latin American countries
+14,Soul,African American music combining R&B and gospel
+15,Indie,Independent music outside major record labels
+16,Alternative,Non-mainstream rock music
+17,Punk,"Fast, aggressive rock music"
+18,Funk,Rhythmic dance music with strong bass lines
+19,Disco,Dance music from the 1970s
+20,House,Electronic dance music with repetitive beats

@@ -1,0 +1,133 @@
+================================================================================
+CSE 4/560 – Semester Project Demo Video
+Music Streaming Platform Database – 10-minute presentation script
+================================================================================
+Adjust names, UB IDs, and screen shares to match your team. Practice once with
+a timer; aim for ~9:30 finished to leave buffer.
+
+--------------------------------------------------------------------------------
+0:00 – 0:45 | OPENING & TEAM
+--------------------------------------------------------------------------------
+[ON CAMERA or title slide]
+"Hi, we're [Team Name]. For CSE 4/560 we built a PostgreSQL database for a
+music streaming platform—think playlists, listening history, subscriptions,
+and catalog data for artists, albums, and songs.
+
+Team members: [Name 1, UBID], [Name 2, UBID], [Name 3 if any].
+
+Today we'll show the schema, how we load data, representative queries including
+updates, stored routines, a transaction with failure handling, and how we
+profiled queries with EXPLAIN and indexes."
+
+--------------------------------------------------------------------------------
+0:45 – 1:45 | PROBLEM & WHY A DATABASE
+--------------------------------------------------------------------------------
+[Slide or DB connection screen]
+"The problem is helping analysts and product staff answer questions like:
+which songs are streamed most, how revenue splits across plan types, and
+which users are heavy listeners. Excel breaks down with millions of events,
+duplicate rules across sheets, and no enforced relationships.
+
+We use PostgreSQL for integrity—foreign keys and check constraints—scalable
+loading with COPY, and complex queries with joins and aggregation in one place."
+
+--------------------------------------------------------------------------------
+1:45 – 3:00 | SCHEMA & DATA (brief)
+--------------------------------------------------------------------------------
+[ER diagram slide OR expand table list in pgAdmin/DBeaver]
+"Our design has eleven relations, including users, artists, albums, songs,
+genres, song_genres, playlists, playlist_songs, streaming_history,
+subscriptions, and a transaction_log table for diagnostics.
+
+Key relationships: songs belong to albums and albums to artists; history
+links users to songs; playlists tie users to many songs through a junction
+table. We use synthetic CSV data—tens of thousands of rows total—generated
+for reproducible foreign keys and interesting analytics."
+
+[Optional 15 sec] Flash ONE check constraint or FK in create.sql if on screen.
+
+--------------------------------------------------------------------------------
+3:00 – 5:00 | TASK 5 – QUERIES & ROUTINES (live demo)
+--------------------------------------------------------------------------------
+"In Task 5 we run more than ten operations. I'll show a few representative
+ones."
+
+[DEMO ORDER - fix any typos in queries.sql before recording: VALUES not VALUE]
+
+A) INSERT – "Add a test user and confirm with SELECT."
+B) INSERT – "Add a playlist row."
+C) UPDATE – "Change a username or subscription plan; show before/after."
+D) DELETE – "Remove a safe test row, e.g. a playlist or a user you inserted
+    for demo—avoid deleting core seed data if your FKs cascade."
+
+E) SELECT with JOIN + GROUP BY + ORDER BY –
+    "Top streamed songs by title and artist."
+F) SELECT with GROUP BY – "Subscribers by plan type and revenue."
+G) SELECT with subquery / HAVING –
+    "Users who stream more than the average per-user stream count."
+
+"For repeated operations we implemented stored procedures and a function:
+add_user, update_subscription, delete_user, and get_user_streams—which
+returns a song title and stream time for a user. I'll call one or two and
+show the result grid."
+
+--------------------------------------------------------------------------------
+5:00 – 6:30 | TASK 6 – TRANSACTION & TRIGGER
+--------------------------------------------------------------------------------
+"We demonstrate failure handling with a trigger and explicit transaction.
+
+We log attempted user inserts into transaction_log via trigger function
+log_insert_attempt. Note: in PostgreSQL, triggers fire on row events—there is
+no trigger that runs only after a rolled-back transaction, so we explain
+abort behavior in the report.
+
+For the demo, use a pattern that survives grading: either a SAVEPOINT before
+a duplicate email insert, or a DO block with EXCEPTION that logs on error.
+If you use BEGIN; INSERT; INSERT duplicate; COMMIT—remember a unique violation
+can abort the whole transaction in default mode, so rehearse what actually
+shows in the tables after rollback.
+
+I'll run our script, show the error or log row, and state clearly: when the
+transaction aborts, uncommitted work is rolled back; committed work in other
+sessions persists."
+
+--------------------------------------------------------------------------------
+6:30 – 8:15 | TASK 7 – EXPLAIN & INDEXES
+--------------------------------------------------------------------------------
+"We identified three expensive-style queries for growth scenarios.
+
+First—filter streaming_history by user_id—we show EXPLAIN ANALYZE before and
+after an index on user_id.
+
+Second—a join through playlist_songs—we compare plans before and after indexes
+on playlist_id and song_id.
+
+Third—aggregation by song_id on streaming_history—we show how an index on
+song_id can help grouping at scale.
+
+I'll scroll the plan enough to mention Seq Scan versus Index Scan and total
+cost or runtime where visible."
+
+--------------------------------------------------------------------------------
+8:15 – 9:15 | WRAP-UP & CONTRIBUTIONS
+--------------------------------------------------------------------------------
+"In Phase 2 our zip includes create.sql, load.sql, CSVs, readme.txt with data
+provenance, a full dump, and Phase2report.pdf with ER updates, BCNF and
+functional dependencies, references, and a contribution table for each member.
+
+If you attempted the bonus, mention the dashboard link and one insight."
+
+--------------------------------------------------------------------------------
+9:15 – 10:00 | Q&A cue & CLOSE
+--------------------------------------------------------------------------------
+"That completes our demo. We're happy to take questions from the course staff.
+Thank you."
+
+================================================================================
+RECORDING TIPS
+================================================================================
+- 1080p screen recording; readable font in terminal or SQL client (14–16 pt).
+- Pre-load database; avoid waiting on long COPY during the video.
+- If one query is slow, run it once before recording and paste 'frozen' output
+  or use LIMIT for display-only.
+- Assign who speaks which segment so handoffs are smooth.

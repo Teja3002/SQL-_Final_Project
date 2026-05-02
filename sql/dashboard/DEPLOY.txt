@@ -1,0 +1,72 @@
+Bonus dashboard – host on Streamlit Cloud (for your instructor)
+==============================================================
+
+Your app reads CSVs from sql/data/ (no local run needed). Streamlit’s servers
+build the app from GitHub and give you a shareable URL.
+
+Prerequisites
+-------------
+- GitHub account.
+- This project pushed to a GitHub repo so it contains at least:
+    sql/dashboard/app.py
+    sql/data/*.csv
+  and at the **repository root** (same level as the inner `sql/` folder):
+    requirements.txt
+
+  In this workspace, root is the folder that already has:
+    requirements.txt   ← added for Streamlit Cloud
+    sql/
+      dashboard/
+      data/
+
+Streamlit Community Cloud (free): step-by-step
+----------------------------------------------
+1. Push your project to GitHub (commit `requirements.txt`, `sql/dashboard/`,
+   and `sql/data/`). Do not rely only on .zip for the grader—Cloud needs the
+   files in Git.
+
+2. Open https://share.streamlit.io and sign in with GitHub; authorize the
+   Streamlit GitHub app when asked.
+
+3. Click “Create app” / “New app”.
+   - Repository: pick your repo and branch (e.g. main).
+   - Main file path:
+       sql/dashboard/app.py
+     (If your git root is different, this path is relative to that root.)
+   - App URL: pick a short unique subdomain (you can change it later).
+
+4. Click Deploy. Wait for “Your app is live!”—copy the **https://…streamlit.app**
+   link and paste it into Phase2report.pdf for the bonus section.
+
+5. Leave the app as **CSV mode** (default): in the sidebar the data source
+   should stay “Local CSV”. In the cloud, that still loads the CSV files
+   bundled in the repo—your instructor does not need PostgreSQL.
+
+Optional: PostgreSQL on Cloud
+-----------------------------
+Only if you have a **publicly reachable** database (e.g. RDS, Supabase).
+In the app settings on Streamlit Cloud → Secrets, add:
+
+  [postgres]
+  host = "..."
+  port = "5432"
+  database = "music_streaming"
+  user = "..."
+  password = "..."
+
+Then in the app sidebar choose “PostgreSQL”. Most class projects can skip this.
+
+Troubleshooting
+--------------
+- “Module not found”: ensure `requirements.txt` is at the **repo root**, not
+  only inside `sql/dashboard/`.
+- “File not found” / empty charts: ensure `sql/data/*.csv` are committed
+  (not gitignored).
+- Private repo: Streamlit Cloud can still deploy it if the Streamlit app has
+  access; alternatively use a public repo for the demo.
+
+Local run (optional, not required for submission)
+-------------------------------------------------
+  cd sql/dashboard
+  pip install -r requirements.txt
+  streamlit run app.py
