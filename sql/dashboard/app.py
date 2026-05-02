@@ -28,7 +28,6 @@ def load_from_csv() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFr
         DATA_DIR / "subscriptions.csv",
         parse_dates=["start_date", "end_date"],
         dayfirst=False,
-        infer_datetime_format=True,
     )
     sub["is_active"] = _norm_bool_series(sub["is_active"])
     sub["price"] = pd.to_numeric(sub["price"], errors="coerce").fillna(0)
