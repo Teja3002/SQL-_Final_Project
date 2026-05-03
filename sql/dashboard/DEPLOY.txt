@@ -30,9 +30,11 @@ Streamlit Community Cloud (free): step-by-step
 
 3. Click “Create app” / “New app”.
    - Repository: pick your repo and branch (e.g. main).
-   - Main file path:
+   - Main file path (either works):
+       streamlit_app.py
+     or:
        sql/dashboard/app.py
-     (If your git root is different, this path is relative to that root.)
+     (Paths are relative to the repository root.)
    - App URL: pick a short unique subdomain (you can change it later).
 
 4. Click Deploy. Wait for “Your app is live!”—copy the **https://…streamlit.app**
