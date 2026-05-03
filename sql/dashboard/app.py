@@ -251,12 +251,6 @@ def main() -> None:
             "Mismatches versus raw catalog size can reveal under-marketed styles."
         )
 
-    with st.expander("SQL excerpts (for your bonus report)"):
-        st.code(
-            Path(__file__).resolve().parent.joinpath("bonus_queries.sql").read_text(encoding="utf-8"),
-            language="sql",
-        )
-
 
 if __name__ == "__main__":
     main()
