@@ -1,12 +1,4 @@
-"""
-Entry point for Streamlit Community Cloud.
 
-Set the app’s Main file path to either:
-  - streamlit_app.py   (this file, repo root), or
-  - sql/dashboard/app.py
-
-CSV data is loaded from sql/data/ — no database required for the public demo.
-"""
 from __future__ import annotations
 
 import sys
