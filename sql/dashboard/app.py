@@ -1,5 +1,3 @@
-
-
 from __future__ import annotations
 
 import os
@@ -117,7 +115,27 @@ def df_top_genres(h: pd.DataFrame, s: pd.DataFrame, sg: pd.DataFrame, g: pd.Data
 
 
 def main() -> None:
-    st.set_page_config(page_title="Music Streaming Analytics", layout="wide", initial_sidebar_state="expanded")
+    st.set_page_config(
+        page_title="Music Streaming Analytics",
+        layout="wide",
+        initial_sidebar_state="expanded",
+        menu_items={
+            "Get help": None,
+            "Report a bug": None,
+            "About": None,
+        },
+    )
+
+    st.markdown(
+        """
+        <style>
+        footer[data-testid="stFooter"] {visibility: hidden; height: 0; margin: 0; padding: 0;}
+        [data-testid="stDecoration"] {display: none !important;}
+        [data-testid="stToolbar"] {visibility: hidden; height: 0; overflow: hidden;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.title("Music streaming platform analytics")
     st.caption("CSE 4/560 bonus dashboard — exploratory charts from the course project dataset.")

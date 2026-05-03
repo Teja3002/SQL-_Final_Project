@@ -1,4 +1,3 @@
---TASK 5
 INSERT INTO users (email, username, password_hash)
 VALUE ('task5@test.com','taskuser','abc123');
 
@@ -61,7 +60,6 @@ JOIN albums al ON s.album_id = al.album_id
 JOIN artists a ON al.artist_id = a.artist_id 
 ORDER BY p.name;
 
---STORED PROCEDURE 1 (INSERT USER PROCEDURE)
 CREATE OR REPLACE PROCEDURE add_user(
     u_email VARCHAR,
     u_username VARCHAR,
@@ -77,7 +75,6 @@ $$;
 
 CALL add_user ('john.doe@test.com','john_doe','pass123')
 
---STORED PROCEDURE 2 (UPDATE SUBSCRIPTION PROCEDURE)
 CREATE OR REPLACE PROCEDURE update_subscription(
     u_id INT,
     new_plan VARCHAR,
@@ -95,7 +92,6 @@ $$;
 
 CALL update_subscription(1,'premium',9.99);
 
---STORED PROCEDURE 3 (GET USER STREAMING HISTORY)
 CREATE OR REPLACE FUNCTION get_user_streams(u_id INT)
 RETURNS TABLE (song_title VARCHAR, streamed_at TIMESTAMP)
 LANGUAGE plpgsql
@@ -111,7 +107,6 @@ $$;
 
 SELECT * FROM get_user_streams(1);
 
---STORED PROCEDURE 4 (DELETE)
 CREATE OR REPLACE PROCEDURE delete_user(u_id INT)
 LANGUAGE plpgsql
 AS $$
@@ -123,7 +118,6 @@ $$;
 
 CALL delete_user(1);
 
---TASK 6 
 
 CREATE TABLE translation_log(
     log_id SERIAL PRIMARY KEY,
@@ -151,7 +145,6 @@ EXECUTE FUNCTION log_insert_attempt();
 BEGIN;
 INSERT INTO users (email,username,password_hash)
 VALUES ('duplicate@test.com','user1','abc');
---THIS WILL FAIL BECAUSE EMAIL MUST BE UNIQUE
 INSERT INTO users (email, username, password_hash)
 VALUES ('duplicate@test.com','user2','xyz');
 COMMIT;
@@ -159,51 +152,38 @@ COMMIT;
 SELECT * FROM users WHERE email = 'duplicate@test.com';
 SELECT * FROM transaction_log;
 
---TASK 7
---STREAMING HISTORY LOOKUP (fILTERING)
---BEFORE OPTIMIZATION
 EXPLAIN ANALYZE
 SELECT * 
 FROM streaming_history
 WHERE user_id = 5;
---OPTIMIZATION
 CREATE INDEX idx_stream_user
 ON streaming_history(user_id);
---AFTER OPTIMIZATION
 EXPLAIN ANALYZE
 SELECT * 
 FROM streaming_history
 WHERE user_id = 5;
 
---PLAYLIST JOIN (JOIN OPTIMIZATION)
---BEFORE OPTIMIZATION
 EXPLAIN ANALYZE
 SELECT p.name, s.title
 FROM playlist_songs ps
 JOIN playlists p ON ps.playlist_id = p.playlist_id
 JOIN songs s ON ps.song_id = s.song_id;
---OPTIMIZATION
 CREATE INDEX idx_ps_playlist
 ON playlist_songs(playlist_id);
 CREATE INDEX idx_ps_song
 ON playlist_songs(song_id);
---AFTER OPTIMIZATION
 EXPLAIN ANALYZE
 SELECT p.name, s.title
 FROM playlist_songs ps
 JOIN playlists p ON ps.playlist_id = p.playlist_id
 JOIN songs s ON ps.song_id = s.song_id;
 
---AGGREGATION (GROUP BY OPTIMIZATION)
---BEFORE OPTIMIZATION
 EXPLAIN ANALYZE
 SELECT song_id, COUNT(*)
 FROM streaming_history
 GROUP BY song_id;
---OPTIMIZATION
 CREATE INDEX idx_stream_song
 ON streaming_history(song_id);
---AFTER OPTIMIZATION
 EXPLAIN ANALYZE
 SELECT song_id, COUNT(*)
 FROM streaming_history
